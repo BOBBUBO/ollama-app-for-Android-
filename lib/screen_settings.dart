@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'main.dart';
 import 'worker_update.dart';
 import 'package:ollama_app/worker_setter.dart';
+import 'package:ollama_app/worker_files.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:dartx/dartx.dart';
@@ -407,13 +408,46 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                     prefs!.setBool("resetOnModelSelect", value);
                     setState(() {});
                   }),
-                  toggle(AppLocalizations.of(context)!.settingsEnableEditing,
-                      (prefs!.getBool("enableEditing") ?? false), (value) {
-                    HapticFeedback.selectionClick();
-                    prefs!.setBool("enableEditing", value);
-                    setState(() {});
-                  }),
-                  toggle(AppLocalizations.of(context)!.settingsShowTips,
+                   toggle(AppLocalizations.of(context)!.settingsEnableEditing,
+                       (prefs!.getBool("enableEditing") ?? false), (value) {
+                     HapticFeedback.selectionClick();
+                     prefs!.setBool("enableEditing", value);
+                     setState(() {});
+                   }),
+                   Row(children: [
+                     const Icon(Icons.folder_rounded, color: Colors.grey),
+                     const SizedBox(width: 16),
+                     Expanded(
+                         child: Text(
+                             AppLocalizations.of(context)!
+                                 .settingsWorkFolder)),
+                     InkWell(
+                         onTap: () async {
+                           HapticFeedback.selectionClick();
+                            final folder =
+                                await getWorkFolder(context, prefs);
+                           if (folder != null) {
+                             setState(() {});
+                           }
+                         },
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(
+                               horizontal: 8, vertical: 12),
+                           child: Text(
+                               (prefs?.getString("workFolder") != null &&
+                                       prefs!.getString("workFolder")!
+                                           .isNotEmpty)
+                                   ? prefs!.getString("workFolder")!
+                                   : AppLocalizations.of(context)!
+                                       .settingsSetWorkFolder,
+                               style: TextStyle(
+                                   color: (Theme.of(context).brightness ==
+                                           Brightness.light)
+                                       ? Colors.blue
+                                       : Colors.blueAccent)),
+                         )),
+                   ]),
+                   toggle(AppLocalizations.of(context)!.settingsShowTips,
                       (prefs!.getBool("tips") ?? true), (value) {
                     HapticFeedback.selectionClick();
                     prefs!.setBool("tips", value);

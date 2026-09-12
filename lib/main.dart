@@ -28,6 +28,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:ollama_app/worker_files.dart';
 
 // client configuration
 
@@ -1175,66 +1176,69 @@ class _MainAppState extends State<MainApp> {
                                 .cast<String, String>(),
                             baseUrl: "$host/api");
 
-                        try {
-                          if ((prefs!.getString("requestType") ?? "stream") ==
-                              "stream") {
-                            final stream = client
-                                .generateChatCompletionStream(
-                                  request: llama.GenerateChatCompletionRequest(
-                                    model: model!,
-                                    messages: history,
-                                    keepAlive: 1,
-                                  ),
-                                )
-                                .timeout(const Duration(seconds: 15));
+                         String llmResponse = "";
+                         try {
+                           if ((prefs!.getString("requestType") ?? "stream") ==
+                               "stream") {
+                             final stream = client
+                                 .generateChatCompletionStream(
+                                   request: llama.GenerateChatCompletionRequest(
+                                     model: model!,
+                                     messages: history,
+                                     keepAlive: 1,
+                                   ),
+                                 )
+                                 .timeout(const Duration(seconds: 15));
 
-                            String text = "";
-                            await for (final res in stream) {
-                              text += (res.message?.content ?? "");
-                              for (var i = 0; i < messages.length; i++) {
-                                if (messages[i].id == newId) {
-                                  messages.removeAt(i);
-                                  break;
-                                }
-                              }
-                              if (chatAllowed) return;
-                              if (text.trim() == "") {
-                                throw Exception();
-                              }
-                              messages.insert(
-                                  0,
-                                  types.TextMessage(
-                                      author: assistant,
-                                      id: newId,
-                                      text: text));
-                              setState(() {});
-                              HapticFeedback.lightImpact();
-                            }
-                          } else {
-                            llama.GenerateChatCompletionResponse request;
-                            request = await client
-                                .generateChatCompletion(
-                                  request: llama.GenerateChatCompletionRequest(
-                                    model: model!,
-                                    messages: history,
-                                    keepAlive: 1,
-                                  ),
-                                )
-                                .timeout(const Duration(seconds: 15));
-                            if (chatAllowed) return;
-                            if (request.message!.content.trim() == "") {
-                              throw Exception();
-                            }
-                            messages.insert(
-                                0,
-                                types.TextMessage(
-                                    author: assistant,
-                                    id: newId,
-                                    text: request.message!.content));
-                            setState(() {});
-                            HapticFeedback.lightImpact();
-                          }
-                        } catch (e) {
+                             String text = "";
+                             await for (final res in stream) {
+                               text += (res.message?.content ?? "");
+                               for (var i = 0; i < messages.length; i++) {
+                                 if (messages[i].id == newId) {
+                                   messages.removeAt(i);
+                                   break;
+                                 }
+                               }
+                               if (chatAllowed) return;
+                               if (text.trim() == "") {
+                                 throw Exception();
+                               }
+                               messages.insert(
+                                   0,
+                                   types.TextMessage(
+                                       author: assistant,
+                                       id: newId,
+                                       text: text));
+                               setState(() {});
+                               HapticFeedback.lightImpact();
+                             }
+                             llmResponse = text;
+                           } else {
+                             llama.GenerateChatCompletionResponse request;
+                             request = await client
+                                 .generateChatCompletion(
+                                   request: llama.GenerateChatCompletionRequest(
+                                     model: model!,
+                                     messages: history,
+                                     keepAlive: 1,
+                                   ),
+                                 )
+                                 .timeout(const Duration(seconds: 15));
+                             if (chatAllowed) return;
+                             if (request.message!.content.trim() == "") {
+                               throw Exception();
+                             }
+                             messages.insert(
+                                 0,
+                                 types.TextMessage(
+                                     author: assistant,
+                                     id: newId,
+                                     text: request.message!.content));
+                             setState(() {});
+                             HapticFeedback.lightImpact();
+                             llmResponse = request.message!.content;
+                           }
+                         } catch (e) {
                           for (var i = 0; i < messages.length; i++) {
                             if (messages[i].id == newId) {
                               messages.removeAt(i);
@@ -1265,6 +1269,24 @@ class _MainAppState extends State<MainApp> {
                                   .settingsHostInvalid("timeout")),
                               showCloseIcon: true));
                           return;
+                        }
+
+                        final operations = parseFileOperations(llmResponse);
+                        if (operations != null) {
+                          final workFolder = prefs?.getString("workFolder");
+                          if (workFolder != null && workFolder.isNotEmpty) {
+                            await executeFileOperations(
+                                operations, workFolder, context);
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(AppLocalizations.of(
+                                          context)!
+                                          .fileOperationNoWorkFolder),
+                                      showCloseIcon: true));
+                            }
+                          }
                         }
 
                         saveChat(chatUuid!, setState);

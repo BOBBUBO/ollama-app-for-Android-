@@ -397,5 +397,50 @@
     "@settingsMainDeveloper": {
         "description": "Text displayed as description for main developer button",
         "context": "Visible in the settings view"
+    },
+    "settingsWorkFolder": "Work folder",
+    "@settingsWorkFolder": {
+        "description": "Text displayed as description for work folder setting",
+        "context": "Visible in the settings view"
+    },
+    "settingsWorkFolderDescription": "The folder where the LLM can create, edit, and remove files",
+    "@settingsWorkFolderDescription": {
+        "description": "Text displayed as description for work folder setting",
+        "context": "Visible in the settings view"
+    },
+    "settingsSetWorkFolder": "Set work folder",
+    "@settingsSetWorkFolder": {
+        "description": "Text displayed for setting the work folder button",
+        "context": "Visible in the settings view"
+    },
+    "fileOperationCreate": "Created",
+    "@fileOperationCreate": {
+        "description": "Text displayed when a file is created by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationEdit": "Edited",
+    "@fileOperationEdit": {
+        "description": "Text displayed when a file is edited by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationRemove": "Removed",
+    "@fileOperationRemove": {
+        "description": "Text displayed when a file is removed by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationFailed": "File operation failed",
+    "@fileOperationFailed": {
+        "description": "Text displayed when a file operation fails",
+        "context": "Visible in a notification"
+    },
+    "fileOperationNoWorkFolder": "No work folder set",
+    "@fileOperationNoWorkFolder": {
+        "description": "Text displayed when the LLM tries to perform a file operation but no work folder is set",
+        "context": "Visible in a notification"
+    },
+    "fileOperationPathTraversal": "File operation blocked: path traversal detected",
+    "@fileOperationPathTraversal": {
+        "description": "Text displayed when a file operation is blocked due to path traversal",
+        "context": "Visible in a notification"
     }
 }

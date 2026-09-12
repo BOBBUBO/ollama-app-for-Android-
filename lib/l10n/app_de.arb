@@ -397,5 +397,50 @@
     "@settingsMainDeveloper": {
         "description": "Text displayed as description for main developer button",
         "context": "Visible in the settings view"
+    },
+    "settingsWorkFolder": "Arbeitsordner",
+    "@settingsWorkFolder": {
+        "description": "Text displayed as description for work folder setting",
+        "context": "Visible in the settings view"
+    },
+    "settingsWorkFolderDescription": "Der Ordner, in dem die KI Dateien erstellen, bearbeiten und entfernen kann",
+    "@settingsWorkFolderDescription": {
+        "description": "Text displayed as description for work folder setting",
+        "context": "Visible in the settings view"
+    },
+    "settingsSetWorkFolder": "Arbeitsordner festlegen",
+    "@settingsSetWorkFolder": {
+        "description": "Text displayed for setting the work folder button",
+        "context": "Visible in the settings view"
+    },
+    "fileOperationCreate": "Erstellt",
+    "@fileOperationCreate": {
+        "description": "Text displayed when a file is created by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationEdit": "Bearbeitet",
+    "@fileOperationEdit": {
+        "description": "Text displayed when a file is edited by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationRemove": "Entfernt",
+    "@fileOperationRemove": {
+        "description": "Text displayed when a file is removed by the LLM",
+        "context": "Visible in a notification"
+    },
+    "fileOperationFailed": "Dateioperation fehlgeschlagen",
+    "@fileOperationFailed": {
+        "description": "Text displayed when a file operation fails",
+        "context": "Visible in a notification"
+    },
+    "fileOperationNoWorkFolder": "Kein Arbeitsordner festgelegt",
+    "@fileOperationNoWorkFolder": {
+        "description": "Text displayed when the LLM tries to perform a file operation but no work folder is set",
+        "context": "Visible in a notification"
+    },
+    "fileOperationPathTraversal": "Dateioperation blockiert: Pfaddurchquerung erkannt",
+    "@fileOperationPathTraversal": {
+        "description": "Text displayed when a file operation is blocked due to path traversal",
+        "context": "Visible in a notification"
     }
 }
