@@ -1271,7 +1271,8 @@ class _MainAppState extends State<MainApp> {
                           return;
                         }
 
-                        final operations = parseFileOperations(llmResponse);
+                        final operations =
+                            await parseFileOperations(llmResponse);
                         if (operations != null) {
                           final workFolder = prefs?.getString("workFolder");
                           if (workFolder != null && workFolder.isNotEmpty) {

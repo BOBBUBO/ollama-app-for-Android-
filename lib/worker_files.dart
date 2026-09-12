@@ -100,9 +100,9 @@ Future<void> executeFileOperations(
   }
 }
 
-Future<List<Map<String, dynamic>>>? parseFileOperations(String text) {
+List<Map<String, dynamic>>? parseFileOperations(String text) {
   final jsonMatches = RegExp(r'```(?:json)?\s*\n?(\[.*?\])\s*\n?```',
-      dotMultiline: true).allMatches(text);
+      multiLine: true).allMatches(text);
   final results = <Map<String, dynamic>>[];
   for (final match in jsonMatches) {
     try {
